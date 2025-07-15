@@ -4,9 +4,38 @@ import 'package:provider/provider.dart';
 
 import '2cd.dart';
 
-void main() {
-  runApp(MyApp());
+
+import 'package:firebase_core/firebase_core.dart'; // Import firebase_core
+import 'package:test_flutter/firebase_options.dart'; // Import the generated firebase_options.dart
+
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  runApp(const TestApp());
 }
+
+
+class TestApp extends StatelessWidget {
+  const TestApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Flutter Firebase Test',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      // Set your chosen test screen as the home:
+      home: const FirestoreTestScreen(), // To test Firestore
+      // OR
+      // home: const AuthTestScreen(), // To test Authentication
+    );
+  }
+}
+
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
@@ -144,7 +173,7 @@ class GeneratorPage extends StatelessWidget {
                 // Navigate to the SecondScreen
               Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const SecondScreen()),
+              MaterialPageRoute(builder: (context) => const FirestoreTestScreen()),
             );
           },
           child: const Text('Go to Second Screen'),

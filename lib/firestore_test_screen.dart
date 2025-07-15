@@ -19,13 +19,17 @@ class _FirestoreTestScreenState extends State<FirestoreTestScreen> {
         'message': 'Hello from Flutter!',
         'timestamp': FieldValue.serverTimestamp(),
       });
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Data written to Firestore!')),
-      );
+      if (mounted) { // Check if the widget is still in the tree
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Data written to Firestore!')),
+        );
+      }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error writing data: $e')),
-      );
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error writing data: $e')),
+        );
+      }
     }
   }
 
@@ -33,28 +37,32 @@ class _FirestoreTestScreenState extends State<FirestoreTestScreen> {
   Future<void> _readDataFromFirestore() async {
     try {
       DocumentSnapshot doc = await _firestore.collection('test_collection').doc('test_document').get();
-      if (doc.exists) {
-        setState(() {
-          _readData = 'Message: "${doc['message']}" (at ${doc['timestamp']?.toDate()})';
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Data read from Firestore!')),
-        );
-      } else {
-        setState(() {
-          _readData = 'Document does not exist.';
-        });
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Document not found.')),
-        );
+      if (mounted) {
+        if (doc.exists) {
+          setState(() {
+            _readData = 'Message: "${doc['message']}" (at ${doc['timestamp']?.toDate()})';
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Data read from Firestore!')),
+          );
+        } else {
+          setState(() {
+            _readData = 'Document does not exist.';
+          });
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Document not found.')),
+          );
+        }
       }
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error reading data: $e')),
-      );
-      setState(() {
-        _readData = 'Error: $e';
-      });
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error reading data: $e')),
+        );
+        setState(() {
+          _readData = 'Error: $e';
+        });
+      }
     }
   }
 
