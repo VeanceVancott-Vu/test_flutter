@@ -2,6 +2,8 @@ import 'package:english_words/english_words.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '2cd.dart';
+
 void main() {
   runApp(MyApp());
 }
@@ -136,6 +138,17 @@ class GeneratorPage extends StatelessWidget {
                 icon: Icon(icon),
                 label: Text('Like'),
               ),
+
+              ElevatedButton(
+                onPressed: () {
+                // Navigate to the SecondScreen
+              Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const SecondScreen()),
+            );
+          },
+          child: const Text('Go to Second Screen'),
+        ),
               SizedBox(width: 10),
               ElevatedButton(
                 onPressed: () {
